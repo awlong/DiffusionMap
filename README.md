@@ -8,7 +8,7 @@ Implementation of the diffusion map (DMap) non-linear manifold learning algorith
  - Included code for matrix/graph alignment via a heuristic DFS scheme.
   - Distance code offers OpenMP parallelism to compute pairwise distances for a set of graphs.
  - Nyström interpolation to determine position in manifold of out of sample objects [7][8][9].
- - Python bindings for these codes
+ - Python bindings for these codes via pybind11 (https://github.com/pybind/pybind11)
  
 ## Upcoming Features/To Do:
  - API-documentation and example scripts (C++ and Python)
