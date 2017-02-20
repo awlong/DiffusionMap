@@ -14,7 +14,7 @@ Implementation of the diffusion map (DMap) non-linear manifold learning algorith
  - API-documentation and example scripts (C++ and Python)
  - Extend distance code into a separate submodule, allowing for a wider range of distance measures to be generated using this framework.
  - Smarter Pybind11 bindings to remove the need for "numpy.asarray" on returned matrices from functions
- - Landmark DMaps for accelerated out-of-sample embedding ()
+ - Landmark DMaps for accelerated out-of-sample embedding [10]
  - Automated bandwidth selection (determine region where full graph connectivity is maintained and select epsilon inside this region)
  
 
