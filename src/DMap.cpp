@@ -62,6 +62,14 @@ arma::mat& DMap::get_evec()
 	return eigenvec;
 }
 
+void DMap::set_evec(const arma::mat& evec)
+{
+	is_new_dist = is_new_kernel = is_new_solve = false;
+	eigenvec = evec;
+	num_evec = eigenvec.n_cols;
+	N = eigenvec.n_rows;
+}
+
 void DMap::set_evec(py::array evec)
 {
 	is_new_dist = is_new_kernel = is_new_solve = false;
@@ -80,15 +88,28 @@ arma::vec& DMap::get_eval()
 	return eigenval;
 }
 
+void DMap::set_eval(const arma::vec& eval)
+{
+	is_new_dist = is_new_kernel = is_new_solve = false;
+	eigenval = eval;
+}
+
 void DMap::set_eval(py::array eval)
 {
 	is_new_dist = is_new_kernel = is_new_solve = false;
 	vec_np_init(eigenval,eval);
 }
 
-void DMap::set_dists(py::array b)
+void DMap::set_dists(const arma::mat& d)
 {
-	mat_np_init(dists,b);
+	dists = d;
+	N = dists.n_rows;
+	is_new_dist = true;
+}
+
+void DMap::set_dists(py::array d)
+{
+	mat_np_init(dists,d);
 	N = dists.n_rows;
 	is_new_dist = true;
 }
