@@ -74,11 +74,11 @@ PYBIND11_PLUGIN(PyDMap) {
 		.def("get_epsilon",&DMap::get_epsilon)
 		.def("set_num_evec",&DMap::set_num_evec)
 		.def("get_num_evec",&DMap::get_num_evec)
-		.def("set_dists",&DMap::set_dists)
+		.def("set_dists",(void(DMap::*)(py::array))&DMap::set_dists)
 		.def("get_evec",&DMap::get_evec)
-		.def("set_evec",&DMap::set_evec)
+		.def("set_evec",(void(DMap::*)(py::array))&DMap::set_evec)
 		.def("get_eval",&DMap::get_eval)
-		.def("set_eval",&DMap::set_eval)
+		.def("set_eval",(void(DMap::*)(py::array))&DMap::set_eval)
 		.def("get_num_samples",&DMap::get_num_samples);
 
 	m.def("nystrom",(arma::mat(*)(DMap&,py::array))&nystrom);
