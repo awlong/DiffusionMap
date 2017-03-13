@@ -22,18 +22,16 @@ public:
 	void set_num_evec(int n);
 	int get_num_evec() { return num_evec; }
 	int get_num_samples() { return N; }
-	void set_dists(py::array d);
-	void set_dists(const arma::mat& d);
+	void set_dists(pyarr_d b);
 
 	bool compute();
 	
+	pyarr_d get_evec_py();
+	pyarr_d get_eval_py();
 	arma::mat& get_evec();
 	arma::vec& get_eval();
-	void set_evec(const arma::mat& evec);
-	void set_evec(py::array evec);
-
-	void set_eval(const arma::vec& eval);
-	void set_eval(py::array eval);
+	void set_evec(pyarr_d evec);
+	void set_eval(pyarr_d eval);
 private:
 	int N, num_evec;
 	double epsilon;

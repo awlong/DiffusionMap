@@ -30,6 +30,3 @@ target_link_libraries(PyDMap ${LAPACK_LIBRARIES})
 set_target_properties(PyDMap PROPERTIES PREFIX "")
 set_target_properties(PyDMap PROPERTIES SUFFIX ".so")
 
-add_custom_command(TARGET PyDMap
-						POST_BUILD
-						COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:PyDMap> ${PROJECT_SOURCE_DIR}/..)

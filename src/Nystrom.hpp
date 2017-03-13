@@ -18,11 +18,13 @@
 #include <omp.h>
 #endif
 
+
 arma::vec
 nystrom_sample(DMap& dmap, arma::vec d)
 {
+	d.print("before");
 	d = arma::exp(-arma::square(d)/(2.0*dmap.get_epsilon()));
-	
+	d.print("DISTANCE");	
 	double inv_rsum = 1.0f/arma::accu(d);
 	d *= inv_rsum;
 	
@@ -59,11 +61,11 @@ nystrom(DMap& dmap, arma::mat dists)
 	return coords;
 }
 
-arma::mat
-nystrom(DMap& dmap, py::array dists)
+pyarr_d
+nystrom(DMap& dmap, pyarr_d dists)
 {
-	arma::mat d;
-	mat_np_init(d,dists);
-	return nystrom(dmap,d);
+	arma::mat d = py_to_mat(dists);
+	arma::mat nys = nystrom(dmap,d);
+	return mat_to_py(nys);
 }
 

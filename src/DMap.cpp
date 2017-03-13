@@ -62,18 +62,19 @@ arma::mat& DMap::get_evec()
 	return eigenvec;
 }
 
-void DMap::set_evec(const arma::mat& evec)
-{
-	is_new_dist = is_new_kernel = is_new_solve = false;
-	eigenvec = evec;
-	num_evec = eigenvec.n_cols;
-	N = eigenvec.n_rows;
+pyarr_d DMap::get_evec_py()
+{	
+	if( (is_new_dist || is_new_kernel || is_new_solve) == true)
+	{
+		WARNING("Warning: eigenvector results not up to date, rerun compute()");
+	}
+	return mat_to_py(eigenvec);
 }
 
-void DMap::set_evec(py::array evec)
+void DMap::set_evec(pyarr_d evec)
 {
 	is_new_dist = is_new_kernel = is_new_solve = false;
-	mat_np_init(eigenvec,evec);
+	eigenvec = py_to_mat(evec);
 	num_evec = eigenvec.n_cols;
 	N = eigenvec.n_rows;
 }
@@ -88,28 +89,24 @@ arma::vec& DMap::get_eval()
 	return eigenval;
 }
 
-void DMap::set_eval(const arma::vec& eval)
+pyarr_d DMap::get_eval_py()
+{
+	if( (is_new_dist || is_new_kernel || is_new_solve) == true)
+	{
+		WARNING("Warning: eigenvalue results not up to date, rerun compute()");
+	}
+	return vec_to_py(eigenval);
+}
+
+void DMap::set_eval(pyarr_d eval)
 {
 	is_new_dist = is_new_kernel = is_new_solve = false;
-	eigenval = eval;
+	eigenval = py_to_vec(eval);
 }
 
-void DMap::set_eval(py::array eval)
+void DMap::set_dists(pyarr_d b)
 {
-	is_new_dist = is_new_kernel = is_new_solve = false;
-	vec_np_init(eigenval,eval);
-}
-
-void DMap::set_dists(const arma::mat& d)
-{
-	dists = d;
-	N = dists.n_rows;
-	is_new_dist = true;
-}
-
-void DMap::set_dists(py::array d)
-{
-	mat_np_init(dists,d);
+	dists = py_to_mat(b);
 	N = dists.n_rows;
 	is_new_dist = true;
 }
