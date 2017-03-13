@@ -8,12 +8,13 @@ Implementation of the diffusion map (DMap) non-linear manifold learning algorith
  - Included code for matrix/graph alignment via a heuristic DFS scheme.
   - Distance code offers OpenMP parallelism to compute pairwise distances for a set of graphs.
  - Nyström interpolation to determine position in manifold of out of sample objects [7][8][9].
+ - K-medoids function for acting on a distance matrix using Voronoi iteration (https://en.wikipedia.org/wiki/K-medoids)
  - Python bindings for these codes via pybind11 (https://github.com/pybind/pybind11)
+  - Direct conversion between numpy and Armadillo types
  
 ## Upcoming Features/To Do:
  - API-documentation and example scripts (C++ and Python)
  - Extend distance code into a separate submodule, allowing for a wider range of distance measures to be generated using this framework.
- - Smarter Pybind11 bindings to remove the need for "numpy.asarray" on returned matrices from functions
  - Landmark DMaps for accelerated out-of-sample embedding [10]
  - Automated bandwidth selection (determine region where full graph connectivity is maintained and select epsilon inside this region)
  
