@@ -168,7 +168,7 @@ private:
         std::sort(all_move_dists.begin()+start, all_move_dists.begin()+end,
                   [](MoveIndex a, MoveIndex b) -> bool
                   {
-                      return a.first < b.second;
+                      return a.first < b.first;
                   });
         perm1[depth] = 0;
         perm2[depth] = 0;
@@ -186,7 +186,7 @@ private:
 		std::sort(move_dists.begin(), move_dists.begin()+nK,
 			[](MoveIndex a, MoveIndex b) -> bool
 				{
-					return a.first < b.second;
+					return a.first < b.first;
 				});
         perm1[depth] = 0;
         perm2[depth] = 0;
