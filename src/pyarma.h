@@ -6,6 +6,13 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
+static void warn(std::string file, int line, std::string msg)
+{
+	std::cout << "[" << file << ":" << line << "] " << msg << std::endl;
+}
+
+#define WARNING(msg) warn(__FILE__,__LINE__,msg)
+
 
 namespace py=pybind11;
 

@@ -48,7 +48,6 @@ PYBIND11_PLUGIN(PyDMap) {
 
 	m.def("kmedoids",&kmedoids,py::arg("dists"),py::arg("k"),py::arg("seeds")=pyarr_u(0,nullptr));
     
-
 	py::class_<DMap>(m,"DMap")
 		.def(py::init<>())
 		.def("compute",&DMap::compute)
@@ -62,8 +61,25 @@ PYBIND11_PLUGIN(PyDMap) {
 		.def("get_eval",&DMap::get_eval_py)
 		.def("set_eval",&DMap::set_eval)
 		.def("get_num_samples",&DMap::get_num_samples);
+	
+    py::class_<LDMap>(m,"LDMap")
+		.def(py::init<>())
+		.def("compute",&LDMap::compute)
+		.def("set_epsilon",&LDMap::set_epsilon)
+		.def("get_epsilon",&LDMap::get_epsilon)
+		.def("set_num_evec",&LDMap::set_num_evec)
+		.def("get_num_evec",&LDMap::get_num_evec)
+		.def("set_dists",&LDMap::set_dists)
+		.def("get_evec",&LDMap::get_evec_py)
+		.def("set_evec",&LDMap::set_evec)
+		.def("get_eval",&LDMap::get_eval_py)
+		.def("set_eval",&LDMap::set_eval)
+		.def("get_num_samples",&LDMap::get_num_samples)
+        .def("get_multiplicity",&LDMap::get_multiplicity_py)
+        .def("set_multiplicity",&LDMap::set_multiplicity);
 
 	m.def("nystrom",(pyarr_d(*)(DMap&,pyarr_d))&nystrom);
+	m.def("nystrom",(pyarr_d(*)(LDMap&,pyarr_d))&nystrom);
 
 	m.def("set_omp_threads",&set_omp_threads);
 	m.def("get_omp_threads",&get_omp_threads);
