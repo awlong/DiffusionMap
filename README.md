@@ -4,19 +4,22 @@ Implementation of the diffusion map (DMap) non-linear manifold learning algorith
 ## DMap Theory - WIP [2][3][4][5]
 
 ## Functionality:
- - Operates on pairwise distance matrix, allowing for arbitrary distance measures to be employed.
- - Included code for matrix/graph alignment via a heuristic DFS scheme.
-  - Distance code offers OpenMP parallelism to compute pairwise distances for a set of graphs.
- - Nyström interpolation to determine position in manifold of out of sample objects [7][8][9].
- - K-medoids function for acting on a distance matrix using Voronoi iteration (https://en.wikipedia.org/wiki/K-medoids)
- - Python bindings for these codes via pybind11 (https://github.com/pybind/pybind11)
-  - Direct conversion between numpy and Armadillo types
+ * Operates on pairwise distance matrix, allowing for arbitrary distance measures to be employed.
+ * Included code for matrix/graph alignment via a heuristic DFS scheme.
+   * Distance code offers OpenMP parallelism to compute pairwise distances for a set of graphs.
+   * Customizable heuristic functions in C++
+ * Nyström interpolation to determine position in manifold of out of sample objects [7][8][9].
+ * K-medoids function for acting on a distance matrix using Voronoi iteration (https://en.wikipedia.org/wiki/K-medoids)
+ * Python bindings for these codes via pybind11 (https://github.com/pybind/pybind11)
+   * Direct conversion between numpy and Armadillo types
+ * Landmark Diffusion Maps for accelerated out-of-sample embedding [10]
  
 ## Upcoming Features/To Do:
- - API-documentation and example scripts (C++ and Python)
- - Extend distance code into a separate submodule, allowing for a wider range of distance measures to be generated using this framework.
- - Landmark DMaps for accelerated out-of-sample embedding [10]
- - Automated bandwidth selection (determine region where full graph connectivity is maintained and select epsilon inside this region)
+ * API-documentation and example scripts (C++ and Python)
+   * Adding custom heuristics
+   * Graph matching example
+ * Extend distance code into a separate submodule, allowing for a wider range of distance measures to be generated using this framework.
+ * Automated bandwidth selection (determine region where full graph connectivity is maintained and select epsilon inside this region)
  
 
 ## Requirements:
@@ -48,4 +51,4 @@ pybind11 (given as a submodule to this package)
 
 [9] B. E. Sonday, M. Haataja and I. G. Kevrekidis, Phys. Rev. E, 2009, 80, 031102.
 
-[10] A. W. Long and A.L. Ferguson (submitted 2016)
+[10] A. W. Long and A.L. Ferguson, Appl. Comput. Harmon. Anal. (in press, 2017) [https://arxiv.org/abs/1706.09396]
