@@ -1,4 +1,4 @@
-
+Python example for using the DMap/LDMap with a "Swiss roll" dataset
 
 ```python
 %matplotlib inline
@@ -11,25 +11,21 @@ import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (8, 12)
 ```
 
-
+Inputting the data
 ```python
 matfile = sio.loadmat('swiss_roll_data.mat')
-```
-
-
-```python
 x_data = np.transpose(matfile['X_data'])
 dists = ssd.squareform(ssd.pdist(x_data))
 y_data = matfile['Y_data']
 ```
 
-
+Properties for the DMap construction
 ```python
 num_evec = 3
 epsilon = 1.
 ```
 
-
+Construct a diffusion map on the full dataset
 ```python
 dmap = PyDMap.DMap()
 dmap.set_dists(dists)
@@ -40,7 +36,7 @@ evecs = dmap.get_evec()
 evals = dmap.get_eval()
 ```
 
-
+Plotting the original 3D manifold, and the 2D diffusion map reconstruction
 ```python
 fig = plt.figure()
 from mpl_toolkits.mplot3d import Axes3D
@@ -61,14 +57,10 @@ plt.show()
 ![png](output_5_0.png)
 
 
-
+Compute a set of landmarks via k-medoids, and then generate a landmark diffusion map manifold
 ```python
 medoids,counts = PyDMap.kmedoids(dists, 6000)
 medoids.astype('int64')
-```
-
-
-```python
 medoid_dists = np.take(np.take(dists,medoids,axis=0),medoids,axis=1)
 ldmap = PyDMap.LDMap() 
 ldmap.set_dists(medoid_dists)
@@ -80,9 +72,9 @@ l_evecs = ldmap.get_evec()
 l_evals = ldmap.get_eval()
 ```
 
+Since the eigenvalue solver may change the signs of the order parameters furnished by the diffusion map, this will perform a simple realignment (only needed for this demonstration, not in practice)
 
 ```python
-# realignment
 fig = plt.figure()
 ax1 = fig.add_subplot(211)
 ax1.scatter(evecs[medoids,1], l_evecs[:,1])
@@ -91,31 +83,23 @@ ax2.scatter(evecs[medoids,2], l_evecs[:,2])
 plt.show()
 
 align_evecs = l_evecs
-# the sign of these modes can be flipped, we realign just for visualization
 for i in range(num_evec):
     slope, _, _, _, _ = stats.linregress(evecs[medoids,i],l_evecs[:,i])
-    print(slope)
     align_evecs[:, i] = np.sign(slope)*align_evecs[:, i]
-    
+ldmap.set_evec(align_evecs)
 ```
 
 
 ![png](output_8_0.png)
 
 
-    -0.460017252042
-    -0.999982455343
-    -0.999082557975
-
-
-
+Compute the coordinates of the non-medoids points using the Nystrom extension
 ```python
-ldmap.set_evec(align_evecs)
 dists_to_medoids = np.take(dists,medoids,axis=0)
 l_nystrom = PyDMap.nystrom(ldmap,dists_to_medoids)
 ```
 
-
+Plotting the resulting 2D manifolds
 ```python
 fig = plt.figure()
 
@@ -146,8 +130,3 @@ plt.show()
 
 ![png](output_10_0.png)
 
-
-
-```python
-
-```
