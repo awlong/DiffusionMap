@@ -1,9 +1,14 @@
-/****
-*
-* Plugin binding
-*
-*
-****/
+//
+//  plugin.cpp
+//  pybind11 plugin for Diffusion Map codes
+//
+//  Updated by Andrew Long on 08/18/17.
+//  Copyright (c) 2016-2017 Andrew Long. All rights reserved.
+//
+//  Utilizes Armadillo (http://arma.sourceforge.net/) C++ LinAlg Library
+//  Sanderson, C. Armadillo: An Open Source C++ Linear Algebra Library
+//  for Fast Prototyping and Computationally Intensive Experiments.
+//  Technical Report, NICTA, 2010.
 
 #include "pyarma.h"
 #include "DFSAlign.hpp"

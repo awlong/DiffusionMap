@@ -1,6 +1,6 @@
 //
-//  DMap.h
-//  DiffusionMap
+//  LDMap.h
+//  Landmark Diffusion Map
 //
 //  Updated by Andrew Long on 08/18/17.
 //  Copyright (c) 2016-2017 Andrew Long. All rights reserved.
@@ -9,6 +9,8 @@
 //  Sanderson, C. Armadillo: An Open Source C++ Linear Algebra Library
 //  for Fast Prototyping and Computationally Intensive Experiments.
 //  Technical Report, NICTA, 2010.
+//
+//  Based on https://arxiv.org/abs/1706.09396
 
 #pragma once
 
