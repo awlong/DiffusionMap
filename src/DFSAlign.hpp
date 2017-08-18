@@ -13,7 +13,7 @@
 #include <armadillo>
 
 #include "GridDLL.hpp"
-
+#include "Heuristic.h"
 
 
 #define DO_MAX_CUT 0
@@ -57,6 +57,7 @@ private:
 	GridDLL full_list;
     std::vector<GridPoint> all_moves;
     std::vector<MoveIndex> all_move_dists;
+    MatchHeuristic heuristic;
     long num_all;
     
 	bool isAligned;
@@ -208,13 +209,13 @@ private:
 	}
 
 public:
-	DFSAlign(const arma::mat& m1, const arma::mat& m2, int branch = 1) 
+	DFSAlign(const arma::mat& m1, const arma::mat& m2, int branch = 1, MatchHeuristic h = MatchHeuristic::ISORANK) 
 	{
-		init(m1, m2, branch);
+		init(m1, m2, branch, h);
 		reset();
 	}
 
-	void init(const arma::mat& m1, const arma::mat& m2, int branch)
+	void init(const arma::mat& m1, const arma::mat& m2, int branch, MatchHeuristic h)
 	{
 		if(m1.n_rows <= m2.n_rows)
 		{
@@ -248,13 +249,19 @@ public:
 			isAligned = true;
 			return;
 		}
-
+        
+        // score measuring via matching heuristic
+        heuristic = h;
+        heuristic_func hfunc = heuristic_map[heuristic];
+        score = (*hfunc)(M1, M2);
+        /*
 		av = arma::sum(M1,1);
 		av = av/arma::norm(av,2);
 		bv = arma::sum(M2,1);
 		bv = bv/arma::norm(bv,2);
 
 		score = av * (bv.t());
+        */
 		full_list.buildFromMat(score);
 		
 		n_branch = branch;
@@ -350,9 +357,9 @@ public:
 
 
 double
-dist_dfs(arma::mat& a, arma::mat& b, uint branches)
+dist_dfs(arma::mat& a, arma::mat& b, uint branches, MatchHeuristic h = MatchHeuristic::ISORANK)
 {
-	DFSAlign aligner(a, b, branches);
+	DFSAlign aligner(a, b, branches, h);
 	return aligner.getNormalizedDistance();
 }
 
