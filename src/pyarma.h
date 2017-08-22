@@ -2,7 +2,7 @@
 //  pyarma.h
 //  binding between armadillo and numpy using pybind11
 //
-//  Updated by Andrew Long on 08/18/17.
+//  Updated by Andrew Long on 08/22/17.
 //  Copyright (c) 2016-2017 Andrew Long. All rights reserved.
 //
 //  Utilizes Armadillo (http://arma.sourceforge.net/) C++ LinAlg Library
@@ -25,9 +25,7 @@ static void warn(std::string file, int line, std::string msg)
 
 #define WARNING(msg) warn(__FILE__,__LINE__,msg)
 
-
 namespace py=pybind11;
-
 typedef py::array_t<double, py::array::f_style | py::array::forcecast> pyarr_d;
 typedef py::array_t<arma::uword, py::array::forcecast> pyarr_u;
 
@@ -45,7 +43,7 @@ arma::mat py_to_mat(pyarr_d& pmat)
 }
 
 inline
-pyarr_d mat_to_py(arma::mat &mat)
+py::buffer_info mat_buffer(arma::mat &mat)
 {
 	py::buffer_info buffer(
 		mat.memptr(),
@@ -55,7 +53,13 @@ pyarr_d mat_to_py(arma::mat &mat)
 		{ mat.n_rows, mat.n_cols },
 		{ sizeof(double), sizeof(double) * mat.n_rows }
 	);
-	return pyarr_d(buffer);
+    return buffer;
+}
+
+inline
+pyarr_d mat_to_py(arma::mat &mat)
+{
+	return pyarr_d(mat_buffer(mat));
 }
 
 inline
@@ -68,7 +72,7 @@ arma::uvec py_to_uvec(pyarr_u &pvec)
 
 
 inline 
-pyarr_u uvec_to_py(arma::uvec &vec)
+py::buffer_info uvec_buffer(arma::uvec &vec)
 {
 	py::buffer_info buffer(
 		vec.memptr(),
@@ -78,7 +82,13 @@ pyarr_u uvec_to_py(arma::uvec &vec)
 		{ vec.n_elem },
 		{ sizeof(arma::uword) }
 	);
-	return pyarr_u(buffer);
+    return buffer;
+}
+
+inline
+pyarr_u uvec_to_py(arma::uvec &vec)
+{
+	return pyarr_u(uvec_buffer(vec));
 }
 
 inline
@@ -93,7 +103,7 @@ arma::vec py_to_vec(pyarr_d &pvec)
 }
 
 inline
-pyarr_d vec_to_py(arma::vec &vec)
+py::buffer_info vec_buffer(arma::vec &vec)
 {
 	py::buffer_info buffer(
 		vec.memptr(),
@@ -103,5 +113,43 @@ pyarr_d vec_to_py(arma::vec &vec)
 		{ vec.n_elem },
 		{ sizeof(double) }
 	);
-	return pyarr_d(buffer);
+    return buffer;
+}
+
+inline
+pyarr_d vec_to_py(arma::vec &vec)
+{
+	return pyarr_d(vec_buffer(vec));
+}
+
+inline 
+std::vector<arma::mat> convert_matlist(std::vector<pyarr_d> &p)
+{
+    size_t N = p.size();
+    if(N == 0)
+        throw std::runtime_error("Calling distance function with empty matrix");
+    arma::mat base_obj = py_to_mat(p.at(0));
+    std::vector<arma::mat> objs;
+    // we have only a single object
+    if(base_obj.n_rows == N && base_obj.n_cols == 1)
+    {  
+        // concatenate columns together
+        for(size_t i = 1; i < N; ++i)
+        {
+            arma::mat tmp = py_to_mat(p.at(i));
+            base_obj = arma::join_rows(base_obj, tmp);
+        }
+        objs.push_back(base_obj);
+    }
+    else
+    {
+        objs.reserve(N);
+        // multiple objects in list
+        for(size_t i = 0; i < N; ++i)
+        {
+            arma::mat tmp = py_to_mat(p.at(i));
+            objs.push_back(tmp);
+        }
+    }
+    return objs;
 }

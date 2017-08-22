@@ -15,7 +15,6 @@
 
 #include <armadillo>
 #include <map>
-#include <pybind11/stl.h>
 #include "pyarma.h"
 
 enum class MatchHeuristic

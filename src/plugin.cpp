@@ -2,7 +2,7 @@
 //  plugin.cpp
 //  pybind11 plugin for Diffusion Map codes
 //
-//  Updated by Andrew Long on 08/18/17.
+//  Updated by Andrew Long on 08/22/17.
 //  Copyright (c) 2016-2017 Andrew Long. All rights reserved.
 //
 //  Utilizes Armadillo (http://arma.sourceforge.net/) C++ LinAlg Library
@@ -17,6 +17,7 @@
 #include "Nystrom.hpp"
 #include "KMedoids.hpp"
 #include "Heuristic.h"
+
 
 #if defined(ENABLE_OPENMP)
 #include <omp.h>
@@ -46,14 +47,12 @@ PYBIND11_PLUGIN(PyDMap) {
         .export_values();
 
 	m.def("dist",&dist, py::arg("a"), py::arg("b"), py::arg("heur")=MatchHeuristic::ISORANK);
-	m.def("pdist",&pdist, py::arg("graphs"), py::arg("heur")=MatchHeuristic::ISORANK);
-	m.def("pdist2",(pyarr_d(*)(std::vector<pyarr_d>,std::vector<pyarr_d>,MatchHeuristic))&pdist2, py::arg("a"), py::arg("b"), py::arg("heur")=MatchHeuristic::ISORANK);
-	m.def("pdist2",(pyarr_d(*)(pyarr_d,std::vector<pyarr_d>,MatchHeuristic))&pdist2, py::arg("a"), py::arg("b"), py::arg("heur")=MatchHeuristic::ISORANK);
-	m.def("pdist2",(pyarr_d(*)(std::vector<pyarr_d>,pyarr_d,MatchHeuristic))&pdist2, py::arg("a"), py::arg("b"), py::arg("heur")=MatchHeuristic::ISORANK);
-
-	m.def("kmedoids",&kmedoids,py::arg("dists"),py::arg("k"),py::arg("seeds")=pyarr_u(0,nullptr));
-    
-	py::class_<DMap>(m,"DMap")
+   	m.def("pdist",&pdist, py::arg("graphs"), py::arg("heur")=MatchHeuristic::ISORANK);
+	m.def("pdist2",&pdist2, py::arg().noconvert(), py::arg().noconvert(), py::arg("heur")=MatchHeuristic::ISORANK);
+	
+    m.def("kmedoids",&kmedoids,py::arg("dists"),py::arg("k"),py::arg("seeds")=pyarr_u(0,nullptr));
+	
+    py::class_<DMap>(m,"DMap")
 		.def(py::init<>())
 		.def("compute",&DMap::compute)
 		.def("set_epsilon",&DMap::set_epsilon)
